@@ -42,7 +42,7 @@ use-peering     = C:ICANHAZ ( S:ICANHAZ-OK / error )
 
 close-peering   = C:KTHXBAI / S:KTHXBAI
 
-error           = S:SRSLY / S:RTFM
+error           = S:SRSLY / S:RTFM / S:WAT
 
 ;   The client opens peering to the server
 OHAI            = signature %x01 protocol version
@@ -97,6 +97,10 @@ reason          = string
 
 ;   Server error reply - client sent an invalid command
 S:RTFM          = signature %x81 reason
+
+;   Server error reply - client sent a malformed command
+S:WAT           = signature %x82 reason
+reason          = string
 [[/code]]
 
 +++ Interconnection Model
@@ -182,6 +186,10 @@ The server SHALL respond to any failed attempt to access a resource on the serve
 ++++ The RTFM Command
 
 The server SHALL respond to an invalid command by sending RTFM. Note that the server SHALL not send RTFM to clients which send an invalid protocol signature. When a client receives a RTFM command it SHOULD close the connection and not reconnect.
+
+++++ The WAT Command
+
+The server SHALL respond to any malformed command by sending WAT. When a client receives a WAT command, it MUST not repeat the previous command.
 
 ++ Security Aspects
 
